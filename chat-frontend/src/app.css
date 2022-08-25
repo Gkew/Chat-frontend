@@ -1,0 +1,5 @@
+.bg-image{
+    background-image: url("../public/img/bgLanding.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+}
