@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+### Setup react project  
+_npx create-ract-app chat-frontend_  
+npm i react-router-dom  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Setup for tailwind  
+_npm install -D tailwindcss postcss autoprefixer_  
+_npx tailwindcss init -p_  
+#### tailwind.config.js  
+_/** @type {import('tailwindcss').Config} */ 
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}_  
+#### index.css  
+_@tailwind base;
+@tailwind components;
+@tailwind utilities;_  
+npm run start  
 
-## Available Scripts
+### Set up structure  
+_cd src_  
+mkdir components  
+cd components  
+touch Landingpage.js  
+### Creating landingpage  
+#### Landingpage.js  
+``` js
+import React from 'react'
+import "../app.css"
 
-In the project directory, you can run:
+function Landingpage() {
+  return (
+    <>
+    <div className="w-full h-screen flex justify-center items-center bg-blue-300 bg-image overflow-hidden">
 
-### `npm start`
+      <div className=' flex flex-col justify-center items-center w-1/3 h-2/3 bg-blue-900' style={{borderRadius: "50%", marginTop: "27%", marginLeft: "5%"}}> 
+        <h1 className='text-white text-3xl'>
+          Chattis the best chatting app world wide! 
+        </h1>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+        <div>
+        <button class="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full mt-7">
+        Join us
+      </button>
+      
+        </div>
+      </div>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+    </div>
+    </>
+  )
+}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export default Landingpage
+```
+### Setup Routes  
+#### app.js  
+``` js
+import React from 'react'
+import "../app.css"
 
-### `npm run build`
+function Landingpage() {
+  return (
+    <>
+    <div className="w-full h-screen flex justify-center items-center bg-blue-300 bg-image overflow-hidden">
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+      <div className=' flex flex-col justify-center items-center w-1/3 h-2/3 bg-blue-900' style={{borderRadius: "50%", marginTop: "27%", marginLeft: "5%"}}> 
+        <h1 className='text-white text-3xl'>
+          Chattis the best chatting app world wide! 
+        </h1>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+        <div>
+        <button class="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full mt-7">
+        Join us
+      </button>
+      
+        </div>
+      </div>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+    </div>
+    </>
+  )
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default Landingpage
+```
