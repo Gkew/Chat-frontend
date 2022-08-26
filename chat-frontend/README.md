@@ -6,6 +6,7 @@ npm i react-router-dom
 _npm install -D tailwindcss postcss autoprefixer_  
 _npx tailwindcss init -p_  
 #### tailwind.config.js  
+```js
 _/** @type {import('tailwindcss').Config} */ 
 module.exports = {
   content: [
@@ -15,12 +16,15 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}_  
-#### index.css  
+}_
+```
+#### index.css
+``` js
 _@tailwind base;
 @tailwind components;
 @tailwind utilities;_  
-npm run start  
+npm run start
+```
 
 ### Set up structure  
 _cd src_  
