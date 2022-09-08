@@ -7,13 +7,15 @@ import {useNavigate} from "react-router-dom"
 import Logo from '../img/LOGO.png'
 import '../app.css'
 // const socket = io.connect("http://localhost:3002");
-const socket = io('http://localhost:3002', { transports : ['websocket'] });
 
+const socket = io('http://localhost:3002', { transports : ['websocket'] });
 
 
  
 
 function Dashboard() {
+
+
   //Osäker på om det här är korrekt men lämnar det så atm /Emmi
   const navigate = useNavigate();
   
@@ -49,7 +51,7 @@ function Dashboard() {
 
     // Messages useStates
   const [room, setRoom] = useState("");
-  const [message, setMessage] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState([]);
 
   
@@ -60,7 +62,7 @@ function Dashboard() {
   };
 
   const sendMessage = () => {
-    socket.emit("send_message", { message, room });
+    socket.emit("send_message", { sentMessage, room });
   };
 
   useEffect(() => {
@@ -70,6 +72,7 @@ function Dashboard() {
       console.log(messageReceived)
     });
   }, [socket]);
+
   return (
 
     
@@ -86,7 +89,7 @@ function Dashboard() {
             />
           </div>
           <div class="xs-2 ml-5 text-white text-2xl">
-          <h3>{localStorage.getItem("userName")}</h3>
+          <h3 name="userName">{localStorage.getItem("userName")}</h3>
         </div>
         <div>
         <button
@@ -151,17 +154,22 @@ function Dashboard() {
             <div class="flex flex-row items-center h-16 rounded-xl bg-gray-300 w-full px-4">
               <div class="flex-grow ml-4 ">
                 <div class="relative w-full">
-                  <input
+                  <form method="post" action="/">
+                  <textarea
+                  className="form-control"
                     type="text"
+                    name="messageText"
                     class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                     onChange={(event) => {
-                      setMessage(event.target.value);
+                      setSentMessage(event.target.value);
                     }}
                   />
+                  </form>
                 </div>
               </div>
               <div class="ml-4">
                 <button
+                type="submit"
                   class="flex items-center justify-center bg-[#004e89] hover:bg-[#f7c5a0] rounded-xl text-white px-4 py-1 flex-shrink-0"
                   onClick={sendMessage}
                 >
