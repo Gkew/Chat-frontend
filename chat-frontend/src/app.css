@@ -1,5 +1,13 @@
+body {
+    overflow: hidden;
+    height: auto;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    color: black;
+}
+
 .bg-image{
-    background-image: url("../public/img/bgLanding.png");
+    /* background-image: url("../public/img/bgLanding.png"); */
     background-repeat: no-repeat;
     background-size: auto;
 }
