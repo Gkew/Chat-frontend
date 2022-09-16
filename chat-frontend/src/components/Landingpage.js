@@ -1,30 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../app.css";
 import { auth } from "../firebase-config";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Logo from '../img/LOGO.png'
 function Landingpage() {
   const navigate = useNavigate();
+
+  const postUser = async(userId, displayName, photoUrl) => {
+      const res = await axios.post("http://localhost:3001/user/addUser", {
+        userId,displayName,photoUrl
+      })
+      console.log(res)
+  }
 
   const googleAuth = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        const userName = result.user.displayName;
-        const userEmail = result.user.email;
-        const userProfilePic = result.user.photoURL;
+        const userId = result.user.uid
+        const displayName = result.user.displayName
+        const photoUrl = result.user.photoURL
 
-        localStorage.setItem("userName", userName);
-        localStorage.setItem("userEmail", userEmail);
-        localStorage.setItem("userProfilePic", userProfilePic);
-
+        localStorage.setItem("user", JSON.stringify({
+          "userId": userId ,
+          "displayName": displayName,
+          "photoUrl": photoUrl
+          }));
+        
+        postUser(userId,displayName,photoUrl)
         navigate("/dashboard", { replace: true });
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  useEffect(()=>{
+    if(localStorage.getItem("user")){
+      navigate("/dashboard")
+    }
+  },[])
 
   return (
     <>
