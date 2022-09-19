@@ -46,20 +46,21 @@ function Dashboard() {
     setCurrentUser(JSON.parse(localStorage.getItem("user")))
   }, [])
 
+  
   const getAllUsers = async () => {
+    console.log(currentUser)
     if (currentUser) {
-      const data = await axios.get(`http://localhost:3001/allusers/${currentUser.uid}`)
+      const data = await axios.get(`http://localhost:3001/user/allusers/${currentUser.Id}`)
       console.log('test')
-      console.log(data.data.users)
       setUsers(data.data)
     }
   }
-
-useState(()=>{
-  if(users.length === 0){
-    getAllUsers(currentUser)
-  }
-})
+  
+  useEffect(() => {
+    if (users.length === 0) {
+      getAllUsers()
+    }
+  })
 
 
   const displayName = (currentUser) =>{
@@ -93,14 +94,22 @@ useState(()=>{
             {displayImg(currentUser)}
           <div className="my-2">
             {displayName(currentUser)}
-            {console.log(users)}
           </div>
             
           </div>
             <div>
           </div>
-          <div className="bg-white h-full w-full rounded-lg">
-
+          <div className="bg-white h-full w-full rounded-lg ">
+            <ul className="p-2">
+              <li className="flex justify-start border-b-2 mt-3 pb-3">
+                <div className="h-10 w-10 rounded-full bg-black">
+                  <img></img>
+                </div>
+                <div className="flex justify-start items-center ml-3">
+                  User Name
+                </div>
+              </li>
+            </ul>
           </div>
 
 
