@@ -258,7 +258,7 @@ function Dashboard() {
           <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-full p-4">
             <div class="ml-0"><img style={{ opacity: '40%', marginLeft: '65%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
             <div className="flex flex-col h-full overflow-x-auto mb-4 ">
-              <div class="flex flex-row items-center hidden pb-2 border-b-2" id="selectedUser">
+              <div class="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg" id="selectedUser">
                 <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
                 <img
                     src={isSelectedPic} alt="profilepic"
