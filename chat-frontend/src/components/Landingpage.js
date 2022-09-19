@@ -23,6 +23,7 @@ function Landingpage() {
       "displayName": displayName,
       "photoUrl": photoUrl
     }))
+    navigate("/dashboard", { replace: true });
   }
 
   const googleAuth = () => {
@@ -35,7 +36,7 @@ function Landingpage() {
         
         postUser(userId,displayName,photoUrl)
         updateUserId(userId,displayName, photoUrl)
-        navigate("/dashboard", { replace: true });
+
       })
       .catch((err) => {
         console.log(err);
