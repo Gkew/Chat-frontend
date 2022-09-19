@@ -22,6 +22,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const SignOut = () => {
+    
     const provider = new GoogleAuthProvider();
     signOut(auth, provider).then((result) => {
 
@@ -29,10 +30,13 @@ function Dashboard() {
 
       signOut(auth).then(() => {
         // Sign-out successful.
+        console.log("test")
+        localStorage.clear()
+        navigate("/", { replace: true })
       }).catch((error) => {
         // An error happened.
+        console.log(error)
       });
-      navigate("/", { replace: true })
     })
       .catch((err) => {
         console.log(err)
@@ -48,7 +52,6 @@ function Dashboard() {
 
   
   const getAllUsers = async () => {
-    console.log(currentUser)
     if (currentUser) {
       const data = await axios.get(`http://localhost:3001/user/allusers/${currentUser.Id}`)
       console.log('test')
