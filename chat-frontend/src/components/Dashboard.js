@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from 'axios';
 import { getAuth, signOut, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase-config"
@@ -9,20 +9,89 @@ import '../app.css'
 import './smaller-components/vibb.css'
 // const socket = io.connect("http://localhost:3002");
 
-const socket = io('http://localhost:3000', { transports: ['websocket'] });
+
 
 //Adding comment for testing git actions
 
 
 function Dashboard() {
-
+  const socket = useRef();
+  const [recievedMessage, setRecievedMessage] = useState(null)
   const [currentUser, setCurrentUser] = useState(undefined)
   const [users, setUsers] = useState([])
+  const [isSelectedPic, setIsSelectedPic] = useState("")
+  const [selectedUserName, setSelectedUserName] = useState("")
+  const [allMessages, setAllMessages] = useState(undefined)
+  const [currentChatID, setCurrentChatId] = useState(undefined)
+  const [msg, setMsg] = useState(undefined)
+  const [selectedUserPhoto, setSelectedUserPhoto] = useState(undefined)
   //Osäker på om det här är korrekt men lämnar det så atm /Emmi
   const navigate = useNavigate();
 
+
+  const handleSend = async (msg) => {
+    document.getElementById("textInput").value = "";
+    setMsg("")
+    await axios.post("http://localhost:3001/messages/addMessage", {
+      from: currentUser.userId,
+      to: currentChatID,
+      message: msg,
+    });
+
+    socket.current.emit("send-msg", {
+      to: currentChatID,
+      from: currentUser._id,
+      message: msg,
+    })
+
+    const msgs = [...allMessages];
+    msgs.push({ fromSelf: true, message: msg })
+    setAllMessages(msgs)
+  }
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("msg-recieve", (msg) => {
+        setRecievedMessage({
+          fromSelf: false,
+          message: msg
+        })
+      })
+    }
+  }, [allMessages])
+
+
+  useEffect(() => {
+    recievedMessage && setAllMessages((prev) => [...prev, recievedMessage])
+  }, [recievedMessage])
+
+  useEffect(() => {
+    if (currentChatID !== undefined) {
+      getMessages()
+    }
+  }, [currentChatID])
+
+  useEffect(() => {
+    if (currentUser) {
+      socket.current = io("http://localhost:3001");
+      socket.current.emit("add-user", currentUser.userId);
+    }
+  }, [currentUser])
+
+  const getMessages = async () => {
+    if (currentUser) {
+      const data = await axios.post("http://localhost:3001/messages/getmessages", {
+        from: currentUser.userId,
+        to: currentChatID
+      });
+
+      setAllMessages(data.data)
+    }
+
+  }
+
   const SignOut = () => {
-    
+
     const provider = new GoogleAuthProvider();
     signOut(auth, provider).then((result) => {
 
@@ -50,15 +119,15 @@ function Dashboard() {
     setCurrentUser(JSON.parse(localStorage.getItem("user")))
   }, [])
 
-  
+
   const getAllUsers = async () => {
     if (currentUser) {
-      const data = await axios.get(`http://localhost:3001/user/allusers/${currentUser.Id}`)
-      console.log('test')
-      setUsers(data.data)
+      const data = await axios.get(`http://localhost:3001/user/allusers/${currentUser.userId}`)
+      setUsers(data.data.users)
+      console.log(data.data.users)
     }
   }
-  
+
   useEffect(() => {
     if (users.length === 0) {
       getAllUsers()
@@ -66,52 +135,114 @@ function Dashboard() {
   })
 
 
-  const displayName = (currentUser) =>{
-    if(currentUser){
-      return(
+  const displayName = (currentUser) => {
+    if (currentUser) {
+      return (
         <p className="text-white text-3xl">{currentUser.displayName}</p>
       )
-    }else return("loading ...")
+    } else return ("loading ...")
   }
 
-  const displayImg = (currentUser) =>{
-    if(currentUser){
-      return(
+  const displayImg = (currentUser) => {
+    if (currentUser) {
+      return (
         <img
-        src={currentUser.photoUrl}
-        alt="Avatar"
-        class="rounded-full"
-      />
+          src={currentUser.photoUrl}
+          alt="Avatar"
+          class="rounded-full"
+        />
       )
-    }else return("loading ...")
+    } else return ("loading ...")
   }
 
+
+  const isSelected = (e,users) => {
+    document.getElementById('selectedUser').classList.remove('hidden')
+    setIsSelectedPic(users.photoUrl)
+    setSelectedUserName(users.displayName)
+    setCurrentChatId(users._id)
+    setSelectedUserPhoto(users.photoUrl)
+  }
+
+  const mapUsers = (users) => {
+
+    if (users.length > 0) {return(
+      users.map((users, index) => {
+        return (
+          <li className="flex justify-start border-b-2 mt-3 pb-3" key={index} onClick={(e)=>isSelected(e,users)}>
+            <div className="h-10 w-10 rounded-full bg-black">
+              <img className="h-10 w-10 rounded-full" src={users.photoUrl} alt="Profile picture" /> 
+
+            </div>
+            <div className="flex justify-start items-center ml-3">
+              {users.displayName}
+            </div>
+
+          </li>
+        )
+      })
+    )} 
+    
+    else return <li> loading ...</li>
+
+  }
+
+  function DisplayAllMessage(msg){
+    if(msg) return (
+      msg.map((msg,index)=>{
+        if(msg.fromSelf)return(
+          <div className="col-start-6 col-end-13 p-3 rounded-lg">
+          <div className="flex items-center justify-start flex-row-reverse">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 flex-shrink-0">
+              <img className="h-10 w-10 rounded-full" src={currentUser.photoUrl} />
+
+            </div>
+            <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+              <div>{msg.message}</div>
+            </div>
+
+          </div>
+          </div>
+        )
+        else return(
+          <div className="col-start-6 col-end-13 p-3 rounded-lg">
+          <div className="flex items-center justify-start flex-row">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 flex-shrink-0">
+              <img className="h-10 w-10 rounded-full" src={selectedUserPhoto} />
+            </div>
+            <div className="relative ml-3 text-sm bg-gray-100 py-2 px-4 shadow rounded-xl">
+              <div>{msg.message}</div>
+            </div>
+
+          </div>
+        </div>
+        )
+      })
+
+    )
+    else return("Loading ...")
+  }
 
   return (
 
 
     <div class="flex h-screen antialiased bg-[#1a659e] text-black-800">
+      {console.log(allMessages)}
       <div class="flex flex-row h-full w-full overflow-x-hidden">
         <div class="flex flex-col py-8 pl-6 pr-2 w-64 bg-blue-650 flex-shrink-0" style={{ borderRadius: '7px' }}>
           <div class="flex justify-center flex-col items-center">
             {displayImg(currentUser)}
-          <div className="my-2">
-            {displayName(currentUser)}
+            <div className="my-2">
+              {displayName(currentUser)}
+            </div>
+
           </div>
-            
-          </div>
-            <div>
+          <div>
           </div>
           <div className="bg-white h-full w-full rounded-lg ">
             <ul className="p-2">
-              <li className="flex justify-start border-b-2 mt-3 pb-3">
-                <div className="h-10 w-10 rounded-full bg-black">
-                  <img></img>
-                </div>
-                <div className="flex justify-start items-center ml-3">
-                  User Name
-                </div>
-              </li>
+              {mapUsers(users)}
+
             </ul>
           </div>
 
@@ -127,17 +258,24 @@ function Dashboard() {
           <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-full p-4">
             <div class="ml-0"><img style={{ opacity: '40%', marginLeft: '65%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
             <div className="flex flex-col h-full overflow-x-auto mb-4 ">
-              <div class="flex flex-row items-center">
+              <div class="flex flex-row items-center hidden pb-2 border-b-2" id="selectedUser">
                 <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  <img
-                    src={localStorage.getItem("userProfilePic")} alt="profilepic"
+                <img
+                    src={isSelectedPic} alt="profilepic"
                     style={{ borderRadius: "50%" }}
                   />
                 </div>
+                <p className="pl-2">{selectedUserName}</p>
                 <div>
-
                 </div>
               </div>
+              {DisplayAllMessage(allMessages)}
+
+            </div>
+
+            
+
+
             </div>
 
             <div class="flex flex-row items-center h-16 rounded-xl bg-gray-300 w-full px-4">
@@ -148,20 +286,21 @@ function Dashboard() {
                       className="form-control"
                       type="text"
                       name="messageText"
+                      id ="textInput"
                       class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                      onChange={() => {
-                        console.log('test')
+                      onChange={(e) => {
+                        setMsg(e.target.value)
                       }}
                     />
                   </form>
                 </div>
               </div>
               <div class="ml-4">
-              <button>Vibb</button>
+                <button>Vibb</button>
                 <button
                   type="submit"
                   class="flex items-center justify-center bg-[#004e89] hover:bg-[#f7c5a0] rounded-xl text-white px-4 py-1 flex-shrink-0"
-                  onClick={() => { console.log('test') }}
+                  onClick={() => { handleSend(msg) }}
                 >
                   <span>Send</span>
                 </button>
@@ -170,7 +309,6 @@ function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

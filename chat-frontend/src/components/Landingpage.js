@@ -12,7 +12,17 @@ function Landingpage() {
       const res = await axios.post("http://localhost:3001/user/addUser", {
         userId,displayName,photoUrl
       })
-      console.log(res)
+  }
+
+
+  const updateUserId = async (userId,displayName, photoUrl) =>{
+    const res = await axios.get("http://localhost:3001/user/getuserid/"+userId)
+    console.log(res)
+    localStorage.setItem("user",JSON.stringify({
+      "userId" : res.data,
+      "displayName": displayName,
+      "photoUrl": photoUrl
+    }))
   }
 
   const googleAuth = () => {
@@ -22,14 +32,9 @@ function Landingpage() {
         const userId = result.user.uid
         const displayName = result.user.displayName
         const photoUrl = result.user.photoURL
-
-        localStorage.setItem("user", JSON.stringify({
-          "userId": userId ,
-          "displayName": displayName,
-          "photoUrl": photoUrl
-          }));
         
         postUser(userId,displayName,photoUrl)
+        updateUserId(userId,displayName, photoUrl)
         navigate("/dashboard", { replace: true });
       })
       .catch((err) => {
