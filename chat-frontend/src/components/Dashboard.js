@@ -11,7 +11,7 @@ import './smaller-components/vibb.css'
 
 const socket = io('http://localhost:3000', { transports: ['websocket'] });
 
-
+//Adding comment for testing git actions
 
 
 function Dashboard() {
@@ -114,7 +114,7 @@ function Dashboard() {
 
 
           <div className="flex flex-col justify-center items-center">
-            <button onClick={SignOut} type="button" class="text-black bg-gray-400 hover:bg-gray-200 rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 ">
+            <button id="signOut" onClick={SignOut} type="button" class="text-black bg-gray-400 hover:bg-gray-200 rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 ">
               Sign out
             </button>
           </div>
