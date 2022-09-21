@@ -1,9 +1,13 @@
-.vibb:onClick {
+.vibb1 {
     /* Start the shake animation and make the animation last for 0.5 seconds */
     animation: shake 0.5s;
-  
+  height: 100%;
+  background-color: white;
+  border-radius: 15px;
+  margin-bottom: 0.5%;
+  padding: 1%;
     /* When the animation is finished, start again */
-    animation-iteration-count: infinite;
+    /* animation-iteration-count: infinite; */
   }
   
   @keyframes shake {
@@ -18,4 +22,7 @@
     80% { transform: translate(-1px, -1px) rotate(1deg); }
     90% { transform: translate(1px, 2px) rotate(0deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+  .vibb {
+    color: black;
   }

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from 'axios';
 import { getAuth, signOut, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase-config"
-import { useNavigate } from "react-router-dom"
+import { resolvePath, useNavigate } from "react-router-dom"
 import Logo from '../img/LOGO.png'
 import '../app.css'
 import './smaller-components/vibb.css'
@@ -15,6 +15,13 @@ import './smaller-components/vibb.css'
 
 
 function Dashboard() {
+  const [style, setStyle] = useState("vibb")
+  
+   const changeStyle = () => {
+    setStyle("vibb1")
+  }
+
+
   const socket = useRef();
   const [recievedMessage, setRecievedMessage] = useState(null)
   const [currentUser, setCurrentUser] = useState(undefined)
@@ -197,7 +204,7 @@ function Dashboard() {
               <img className="h-10 w-10 rounded-full" src={currentUser.photoUrl} />
 
             </div>
-            <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+            <div style={{maxWidth: '60%'}} className="relative mr-3 text-sm bg-indigo-200 py-2 px-4 shadow rounded-xl">
               <div>{msg.message}</div>
             </div>
 
@@ -210,7 +217,7 @@ function Dashboard() {
             <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 flex-shrink-0">
               <img className="h-10 w-10 rounded-full" src={selectedUserPhoto} />
             </div>
-            <div className="relative ml-3 text-sm bg-gray-100 py-2 px-4 shadow rounded-xl">
+            <div style={{maxWidth: '60%'}} className="relative ml-3 text-sm bg-gray-200 py-2 px-4 shadow rounded-xl">
               <div>{msg.message}</div>
             </div>
 
@@ -220,16 +227,16 @@ function Dashboard() {
       })
 
     )
-    else return("Loading ...")
+    else return("Loading ..." )
   }
 
   return (
 
 
-    <div class="flex h-screen antialiased bg-[#1a659e] text-black-800">
+    <div class="flex h-screen antialiased  text-black-800">
       {console.log(allMessages)}
       <div class="flex flex-row h-full w-full overflow-x-hidden">
-        <div class="flex flex-col py-8 pl-6 pr-2 w-64 bg-blue-650 flex-shrink-0" style={{ borderRadius: '7px' }}>
+        <div class="flex flex-col py-8 pl-6 pr-2 w-80 bg-white border-r-2 flex-shrink-0" style={{ borderRadius: '7px' }}>
           <div class="flex justify-center flex-col items-center">
             {displayImg(currentUser)}
             <div className="my-2">
@@ -239,7 +246,8 @@ function Dashboard() {
           </div>
           <div>
           </div>
-          <div className="bg-white h-full w-full rounded-lg ">
+          
+          <div className="bg-white h-full w-full rounded-lg overflow-scroll overflow-x-hidden">
             <ul className="p-2">
               {mapUsers(users)}
 
@@ -248,16 +256,16 @@ function Dashboard() {
 
 
           <div className="flex flex-col justify-center items-center">
-            <button id="signOut" onClick={SignOut} type="button" class="text-black bg-gray-400 hover:bg-gray-200 rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 ">
+            <button id="signOut" onClick={SignOut} type="button" class="text-white bg-blue-800 hover:bg-blue-600 rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 ">
               Sign out
             </button>
           </div>
 
         </div>
-        <div class="flex flex-col flex-auto h-full p-6 bg-blue-650">
-          <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-full p-4">
-            <div class="ml-0"><img style={{ opacity: '40%', marginLeft: '65%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
-            <div className="flex flex-col h-full overflow-x-auto mb-4 ">
+        <div class="flex flex-col flex-auto h-full p-6 bg-white">
+          <div className={style} class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-90 mb-2 p-4">
+            <div class="ml-0"><img style={{ opacity: '10%', marginLeft: '32%', marginTop: '10%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
+            <div  className="flex flex-col h-full overflow-x-auto mb-4 ">
               <div class="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg" id="selectedUser">
                 <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
                 <img
@@ -296,10 +304,12 @@ function Dashboard() {
                 </div>
               </div>
               <div class="ml-4">
-                <button>Vibb</button>
+              <button class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-2 mb-1 ml-2 mt-1 flex-shrink-0" onClick={changeStyle}>
+              Vibb
+            </button>
                 <button
                   type="submit"
-                  class="flex items-center justify-center bg-[#004e89] hover:bg-[#f7c5a0] rounded-xl text-white px-4 py-1 flex-shrink-0"
+                  class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-4 py-1 mb-1 flex-shrink-0"
                   onClick={() => { handleSend(msg) }}
                 >
                   <span>Send</span>
