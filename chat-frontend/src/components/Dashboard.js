@@ -41,6 +41,12 @@ function Dashboard() {
   //Osäker på om det här är korrekt men lämnar det så atm /Emmi
   const navigate = useNavigate();
 
+//  const input = document.getElementById("textInput");
+//  input.addEventListener("keyup", function(e) {
+//    if (e.key === "Enter") {
+//      document.getElementById("sendBtn").click();
+//    }
+//  });
 
   const handleSend = async (msg) => {
     document.getElementById("textInput").value = "";
@@ -151,7 +157,7 @@ function Dashboard() {
   const displayName = (currentUser) => {
     if (currentUser) {
       return (
-        <p className="text-white text-3xl">{currentUser.displayName}</p>
+        <p className="text-black text-3xl">{currentUser.displayName}</p>
       )
     } else return ("loading ...")
   }
@@ -239,7 +245,7 @@ function Dashboard() {
   return (
 
 
-    <div class="flex h-screen antialiased  text-black-800">
+    <div class="flex h-screen antialiased text-black-800">
       {console.log(allMessages)}
       <div class="flex flex-row h-full w-full overflow-x-hidden">
         <div class="flex flex-col py-8 pl-6 pr-2 w-80 bg-white border-r-2 flex-shrink-0" style={{ borderRadius: '7px' }}>
@@ -254,7 +260,7 @@ function Dashboard() {
           </div>
           
           <div className="bg-white h-full w-full rounded-lg overflow-scroll overflow-x-hidden">
-            <ul className="p-2">
+            <ul className="p-2 cursor-pointer">
               {mapUsers(users)}
 
             </ul>
@@ -271,7 +277,7 @@ function Dashboard() {
         <div class="flex flex-col flex-auto h-full p-6 bg-white">
           <div className={`${vibbTrue ? "vibb1" : ""} flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-90 mb-2 p-4`}>
             <div class="ml-0"><img style={{ opacity: '10%', marginLeft: '32%', marginTop: '10%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
-            <div  className="flex flex-col h-full overflow-x-auto mb-4 ">
+            <div  className="flex flex-col h-full overflow-x-auto mb-4 overflow-y-auto">
               <div class="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg" id="selectedUser">
                 <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
                 <img
@@ -317,6 +323,7 @@ function Dashboard() {
               Vibb
             </button>
                 <button
+                id="sendBtn"
                   type="submit"
                   class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-4 py-1 mb-1 flex-shrink-0"
                   onClick={() => { handleSend(msg) }}

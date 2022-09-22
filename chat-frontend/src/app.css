@@ -4,7 +4,7 @@ body {
     padding: 0;
     font-family: 'Quicksand', sans-serif;
     color: black;
-    
+    overflow: hidden;
 }
 
 .bg-image{
