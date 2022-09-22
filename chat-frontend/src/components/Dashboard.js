@@ -15,10 +15,16 @@ import './smaller-components/vibb.css'
 
 
 function Dashboard() {
-  const [style, setStyle] = useState("vibb")
+  
+
+  const [vibbTrue, setVibbTrue] = useState(false)
   
    const changeStyle = () => {
-    setStyle("vibb1")
+      if(vibbTrue){
+        setVibbTrue(false)
+      }else{
+        setVibbTrue(true)
+      }
   }
 
 
@@ -263,7 +269,7 @@ function Dashboard() {
 
         </div>
         <div class="flex flex-col flex-auto h-full p-6 bg-white">
-          <div className={style} class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-90 mb-2 p-4">
+          <div className={`${vibbTrue ? "vibb1" : ""} flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-90 mb-2 p-4`}>
             <div class="ml-0"><img style={{ opacity: '10%', marginLeft: '32%', marginTop: '10%', zIndex: '0', position: 'absolute' }} className=" h-30 w-auto" src={Logo} alt="Logo" /></div>
             <div  className="flex flex-col h-full overflow-x-auto mb-4 ">
               <div class="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg" id="selectedUser">
@@ -304,7 +310,10 @@ function Dashboard() {
                 </div>
               </div>
               <div class="ml-4">
-              <button class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-2 mb-1 ml-2 mt-1 flex-shrink-0" onClick={changeStyle}>
+              <button class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-2 mb-1 ml-2 mt-1 flex-shrink-0" 
+              onClick={changeStyle}
+              id = "vibbButton"
+              >
               Vibb
             </button>
                 <button
