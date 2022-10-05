@@ -8,7 +8,7 @@ import Logo from '../img/LOGO.png'
 import '../app.css'
 import './smaller-components/vibb.css'
 // const socket = io.connect("http://localhost:3002");
-
+import Search from "./smaller-components/search";
 
 
 //Adding comment for testing git actions
@@ -38,6 +38,7 @@ function Dashboard() {
   const [currentChatID, setCurrentChatId] = useState(undefined)
   const [msg, setMsg] = useState(undefined)
   const [selectedUserPhoto, setSelectedUserPhoto] = useState(undefined)
+  
   //Osäker på om det här är korrekt men lämnar det så atm /Emmi
   const navigate = useNavigate();
 
@@ -47,6 +48,8 @@ function Dashboard() {
 //      document.getElementById("sendBtn").click();
 //    }
 //  });
+
+
 
   const handleSend = async (msg) => {
     document.getElementById("textInput").value = "";
@@ -162,6 +165,7 @@ function Dashboard() {
     } else return ("loading ...")
   }
 
+
   const displayImg = (currentUser) => {
     if (currentUser) {
       return (
@@ -254,8 +258,15 @@ function Dashboard() {
             <div className="my-2">
               {displayName(currentUser)}
             </div>
+  
 
+<Search />
+      
           </div>
+
+
+
+
           <div>
           </div>
           
@@ -292,10 +303,6 @@ function Dashboard() {
               {DisplayAllMessage(allMessages)}
 
             </div>
-
-            
-
-
             </div>
 
             <div class="flex flex-row items-center h-16 rounded-xl bg-gray-300 w-full px-4">
