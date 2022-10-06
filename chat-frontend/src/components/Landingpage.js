@@ -57,7 +57,7 @@ function Landingpage() {
       <button 
       onClick={googleAuth}
       type="button"
-      class="hover:shadow-2xl shadow-2xl justify-center items-center w-40 text-white bg-blue-500 hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:focus:ring-[#4285F4]/55"
+      class="hover:shadow-2xl shadow-2xl justify-center items-center w-40 text-white bg-[#6067ad] hover:bg-[#aaacdc] focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:focus:ring-[#4285F4]/55"
       >Join with google </button> 
       <img className="justify-center" src={Logo} alt="Logo"  />
       </div>

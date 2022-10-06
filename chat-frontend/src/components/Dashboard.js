@@ -45,16 +45,17 @@ function Dashboard() {
   //   }
   // });
 
-  const el = document.getElementById('chatFeed');
-// id of the chat container ---------- ^^^
-if (el) {
-  el.scrollTop = el.scrollHeight;
-}
 
 
-  const handleSend = async (msg) => {
-    document.getElementById("textInput").value = "";
-    setMsg("");
+
+
+  const handleSend = async (e) => {
+    e.preventDefault()
+    if(msg.length === 0){
+      alert("text can't be empty")
+      return
+    }
+
     await axios.post("http://localhost:3001/messages/addMessage", {
       from: currentUser.userId,
       to: currentChatID,
@@ -70,6 +71,9 @@ if (el) {
     const msgs = [...allMessages];
     msgs.push({ fromSelf: true, message: msg });
     setAllMessages(msgs);
+
+    document.getElementById("textInput").value = "";
+    setMsg("");
   };
 
   useEffect(() => {
@@ -150,7 +154,7 @@ if (el) {
         `http://localhost:3001/user/allusers/${currentUser.userId}`
       );
       setUsers(data.data.users);
-      setSearchResult(data.data.users)
+      setSearchResult(data.data.users);
       console.log(data.data.users);
     }
   };
@@ -256,13 +260,17 @@ if (el) {
   }
 
   useEffect(() => {
-    if(searchTerm.length>0){
+    if (searchTerm.length > 0) {
       if (users) {
         console.log("test");
         let tempArr = [];
-  
+
         for (var i = 0; i < users.length; i++) {
-          for (var j = 0;j <= users[i].displayName.length - searchTerm.length; j++) {
+          for (
+            var j = 0;
+            j <= users[i].displayName.length - searchTerm.length;
+            j++
+          ) {
             let temp = users[i].displayName.substring(j, j + searchTerm.length);
             if (temp.toLowerCase() === searchTerm.toLowerCase()) {
               tempArr.push({
@@ -277,21 +285,21 @@ if (el) {
         setSearchResult(tempArr);
         document.getElementById("selectedUser").classList.add("hidden");
       }
-    }else{
-      if(users){
-        setSearchResult(users)
+    } else {
+      if (users) {
+        setSearchResult(users);
       }
     }
   }, [searchTerm]);
 
   return (
-    <div class="flex h-screen antialiased text-black-800">
-      <div class="flex flex-row h-full w-full overflow-x-hidden">
+    <div className="flex h-screen text-black-800">
+      <div className="flex flex-row h-full w-full overflow-x-hidden">
         <div
-          class="flex flex-col py-8 pl-6 pr-2 w-80 bg-white border-r-2 flex-shrink-0"
+          class="top-0 left-0 w-[20vw] flex flex-col py-8 pl-6 pr-2 w-80 bg-white border-r-2 flex-shrink-0"
           style={{ borderRadius: "7px" }}
         >
-          <div class="flex justify-center flex-col items-center">
+          <div className="flex justify-center flex-col items-center">
             {displayImg(currentUser)}
             <div className="my-2">{displayName(currentUser)}</div>
 
@@ -301,7 +309,7 @@ if (el) {
                   onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
                   type="search"
                   id="default-search"
-                  className="block p-4 left-0 w-72 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-4 mr-3 w-72 text-sm text-gray-900 bg-gray-50 rounded-lg border border-[#aaacdc] focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search conversations..."
                 />
               </div>
@@ -319,86 +327,71 @@ if (el) {
               id="signOut"
               onClick={SignOut}
               type="button"
-              class="text-white bg-blue-800 hover:bg-blue-600 rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 "
+              class="text-white bg-[#6067ad] hover:bg-[#aaacdc] rounded-lg text-m px-10 py-1 mt-4  inline-flex items-center dark:focus:ring-[#4285F4]/55 "
             >
               Sign out
             </button>
           </div>
         </div>
-        <div class="flex flex-col flex-auto h-full p-6 bg-white">
+        <div className="flex flex-col w-full">
           <div
-            className={`${
-              vibbTrue ? "vibb1" : ""
-            } flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white h-90 mb-2 p-4`}
+            className="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg"
+            id="selectedUser"
           >
-            <div class="ml-0">
+            <div className="flex items-center mt-2 justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
               <img
-                style={{
-                  opacity: "10%",
-                  marginLeft: "32%",
-                  marginTop: "10%",
-                  zIndex: "0",
-                  position: "absolute",
-                }}
-                className=" h-30 w-auto"
-                src={Logo}
-                alt="Logo"
+                src={isSelectedPic}
+                alt="profilepic"
+                style={{ borderRadius: "50%" }}
               />
             </div>
-            <div id="chatFeed" className="flex flex-col mb-4">
-              <div
-                class="flex flex-row items-center hidden justify-center pb-2 border-b-2 text-lg"
-                id="selectedUser"
-              >
-                <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  <img
-                    src={isSelectedPic}
-                    alt="profilepic"
-                    style={{ borderRadius: "50%" }}
-                  />
+            <p className="pl-2">{selectedUserName}</p>
+          </div>
+          <div className="flex flex-col flex-auto h-3/4 p-6 bg-white">
+            <div
+              className={`${
+                vibbTrue ? "vibb1" : ""
+              } flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-white mb-2 p-4 overflow-auto h-full flex-col-reverse`}
+            >
+              <div id="chatFeed" className="flex flex-col mb-4">
+                <div className="flex flex-col">
+                  {DisplayAllMessage(allMessages)}
                 </div>
-                <p className="pl-2">{selectedUserName}</p>
-                <div></div>
               </div>
-              {DisplayAllMessage(allMessages)}
             </div>
           </div>
 
-          <div class="flex flex-row items-center h-16 rounded-xl bg-gray-200 w-full px-4">
-            <div class="flex-grow ml-4 ">
-              <div class="relative w-full">
-                <form method="post" action="/">
+          <div className="flex flex-row items-center rounded-xl bg-[#f3f3fb] w-full h-16 px-4">
+            <div className="flex-grow ml-2">
+              <div className=" w-full">
+                <form className="flex flex-row" onSubmit={handleSend} id="send-message">
                   <input
                     className="form-control"
                     type="text"
                     name="messageText"
                     id="textInput"
-                    class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                    class="flex h-10 w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4"
                     onChange={(e) => {
                       setMsg(e.target.value);
                     }}
+                    
                   />
-                </form>
-              </div>
-            </div>
-            <div class="ml-4">
+                <button
+                id="sendBtn"
+                type="submit"
+                className="flex items-center justify-center bg-[#6067ad] hover:bg-[#aaacdc] rounded-xl text-white px-4 py-0.5 mb-2 mt-2 ml-2 flex-shrink-0"
+              >
+                <span>Send</span>
+              </button>
               <button
-                class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-2 mb-1 ml-2 mt-1 flex-shrink-0"
+                class="flex ml-2 items-center justify-center bg-[#6067ad] hover:bg-[#aaacdc] rounded-xl text-white px-4 py-0.5 mb-2 mt-2 flex-shrink-0"
                 onClick={changeStyle}
                 id="vibbButton"
               >
                 Vibb
               </button>
-              <button
-                id="sendBtn"
-                type="submit"
-                class="flex items-center justify-center bg-[#004e89] hover:bg-blue-600 rounded-xl text-white px-4 py-1 mb-1 flex-shrink-0"
-                onClick={() => {
-                  handleSend(msg);
-                }}
-              >
-                <span>Send</span>
-              </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

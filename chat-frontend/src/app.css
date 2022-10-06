@@ -1,6 +1,4 @@
 body {
-    overflow: hidden;
-    height: auto;
     padding: 0;
     font-family: 'Quicksand', sans-serif;
     color: black;
@@ -12,6 +10,6 @@ body {
     background-repeat: no-repeat;
     background-size: auto;
 }
- html {
-    background-color: rgba(225, 225, 252, 0.404);
+html {
+    overflow: hidden;
 }
