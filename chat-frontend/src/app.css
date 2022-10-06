@@ -12,3 +12,6 @@ body {
     background-repeat: no-repeat;
     background-size: auto;
 }
+ html {
+    background-color: rgba(225, 225, 252, 0.404);
+}
