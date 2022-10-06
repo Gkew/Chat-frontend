@@ -55,7 +55,6 @@ function Dashboard() {
       alert("text can't be empty")
       return
     }
-
     await axios.post("http://localhost:3001/messages/addMessage", {
       from: currentUser.userId,
       to: currentChatID,
